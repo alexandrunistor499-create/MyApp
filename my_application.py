@@ -19,6 +19,9 @@ st.set_page_config(
 
 MODEL = "gemma3:1b"
 
+client = ollama.Client(
+    host='https://gangly-leona-adsorptively.ngrok-free.dev',
+    headers={'ngrok-skip-browser-warning': 'true'})
 # -----------------------------
 # STYLES
 # -----------------------------
@@ -203,7 +206,7 @@ with col_space2:
 
             # Apelăm modelul cu streaming (pentru efectul de "typing")
             try:
-                stream = ollama.chat(
+                stream = client.chat(
                     model=model,
                     messages=payload,
                     stream=True
@@ -211,8 +214,8 @@ with col_space2:
                 # Modifică bucata de cod unde citești stream-ul:
                 with st.chat_message("assistant"):
                     # Chemăm funcția care returnează stream-ul de la Ollama
-                    response_stream = ollama.chat(
-                        model="gemma3:1b",
+                    response_stream = client.chat(
+                        model=model,
                         messages=payload,
                         stream=True
                     )
